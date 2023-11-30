@@ -34,7 +34,7 @@ estimator.set_hyperparameters(predictor_type='regressor')
 estimator.fit({'train': s3_input_train, 'validation': s3_input_test}, logs=False)
 
 # deploy
-predictor = estimator.deploy(initial_instance_count=1, instance_type='ml.m5.large', logs=False)
+predictor = estimator.deploy(initial_instance_count=1, instance_type='ml.m5.large')
 
 # print endpoint name
 print(predictor.endpoint_name)
