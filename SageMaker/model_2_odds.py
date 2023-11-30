@@ -28,7 +28,7 @@ estimator = sagemaker.estimator.Estimator(container,
                                           enable_cloudwatch_metrics=True)
 
 # hyperparameters
-estimator.set_hyperparameters(predictor_type='binary_classifier')
+estimator.set_hyperparameters(predictor_type='regressor')
 
 # fit
 estimator.fit({'train': s3_input_train, 'validation': s3_input_test}, logs=False)
@@ -38,13 +38,3 @@ predictor = estimator.deploy(initial_instance_count=1, instance_type='ml.m5.larg
 
 # print endpoint name
 print(predictor.endpoint_name)
-
-# define sigmoid function
-#def sigmoid(x):
-#    return 1 / (1 + np.exp(-x))
-
-# get predictions 
-#predictions = predictor.predict(test_data)
-
-# apply sigmoid 
-#probabilities = sigmoid(predictions)
