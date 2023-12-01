@@ -53,6 +53,7 @@ func main() {
 }
 
 func handleRequest(w http.ResponseWriter, r *http.Request) {
+	log.Println("Received request")
 	var data InputData
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
