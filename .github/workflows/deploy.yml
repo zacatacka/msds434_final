@@ -34,6 +34,9 @@ jobs:
       run: |
         sed -i 's/<tag>/${{ github.sha }}/g' Dockerrun.aws.json
 
+    - name: Zip the application
+      run: zip -r application.zip .
+
     - name: Deploy to Elastic Beanstalk
       uses: einaregilsson/beanstalk-deploy@v14
       with:
@@ -43,4 +46,4 @@ jobs:
         environment_name: Airlinepredictor-env  
         version_label: ${{ github.run_id }}
         region: us-east-2  
-        env_vars: VAR1=${{ secrets.VAR1 }},VAR2=${{ secrets.VAR2 }}  
+        deployment_package: application.zip
