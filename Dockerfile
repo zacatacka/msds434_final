@@ -1,4 +1,4 @@
-# Start from the latest golang base image
+# Start from the latest golang base image test
 FROM golang:latest
 
 # Set the Current Working Directory inside the container
