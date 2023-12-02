@@ -108,6 +108,7 @@ func inputDataToCSV(data InputData) string {
 }
 
 func getPrediction(csvData string, endpointName string) (string, error) {
+	log.Println("CSV Data:", csvData)
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
 		SharedConfigState: session.SharedConfigEnable,
 		Config: aws.Config{
