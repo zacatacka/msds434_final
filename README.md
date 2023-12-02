@@ -1,6 +1,6 @@
 # msds434_final
 
-1. Local Machine
+## 1. Local Machine
     -Pull data from: https://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.asp?20=E
     -We pulled 10 years (2010-2020)
     -Run the data_prep.ipynb file, which creates the following:
@@ -9,7 +9,7 @@
         File paths will need to be adjusted
         
 
-2. AWS Steps
+## 2. AWS Steps
     -Create an IAM role with the following permissions (unsure if all are still needed):
         AdministratorAccess-AWSElasticBeanstalk
         AmazonEC2ContainerRegistryFullAccess
@@ -35,7 +35,7 @@
         Update the bucket_name variable for both from 'tktk' to the bucket created above
         Run both models and record their endpoints
 
-3. github
+## 3. github
     -You must upload the following to the repositories' secrets keys:
         AWS_ACCESS_KEY_ID
         AWS_SECRET_ACCESS_KEY
@@ -62,6 +62,6 @@
         You should be able to see the updated version on the Elastic Beanstalk dashboard
             CloudWatch Metrics are available automatically through Elastic Beanstalk and Cloudwatch
 
-4. Test
+## 4. Test
     -Testing can occur with any of of the relevant months (numeral), carriers (string) and airport code (string). Sample below:
     curl -X POST -H "Content-Type: application/json" -d '{"month":12, "carrier":"American Airlines Inc.", "airport":"PHX"}' http://airlines-env.eba-geqwdvnt.us-east-2.elasticbeanstalk.com/predict
