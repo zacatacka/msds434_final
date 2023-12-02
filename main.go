@@ -16,7 +16,7 @@ import (
 )
 
 var endpoint1 = "linear-learner-2023-12-02-16-34-32-276"
-var endpoint2 = "linear-learner-2023-12-02-16-37-04-095"
+var endpoint2 = "linear-learner-2023-12-02-16-40-41-257"
 
 type InputData struct {
 	Month   int    `json:"month"`
@@ -110,6 +110,9 @@ func inputDataToCSV(data InputData) string {
 func getPrediction(csvData string, endpointName string) (string, error) {
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
 		SharedConfigState: session.SharedConfigEnable,
+		Config: aws.Config{
+            		Region: aws.String("us-east-2"),
+        	},
 	}))
 
 	sagemakerClient := sagemakerruntime.New(sess)
