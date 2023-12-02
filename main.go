@@ -140,7 +140,17 @@ func getPrediction(data InputData, endpointName string) (string, error) {
         return "", err
     }
 
-    prediction := string(output.Body)
+    var resp struct {
+        Predictions []struct {
+            Score float64 `json:"score"`
+        } `json:"predictions"`
+    }
+    if err := json.Unmarshal(output.Body, &resp); err != nil {
+        return "", err
+    }
+
+    // Format the prediction
+    prediction := fmt.Sprintf("Predicted Delay Time: %.1f minutes\nOdds of a Delay: %.1f%%", resp.Predictions[0].Score, resp.Predictions[1].Score * 100)
 
     return prediction, nil
 }
