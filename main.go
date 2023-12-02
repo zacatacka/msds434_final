@@ -53,43 +53,45 @@ func main() {
 }
 
 func handleRequest(w http.ResponseWriter, r *http.Request) {
-	log.Println("Received request")
-	var data InputData
-	err := json.NewDecoder(r.Body).Decode(&data)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+    log.Println("Received request")
+    var data InputData
+    err := json.NewDecoder(r.Body).Decode(&data)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
 
-	carrierClass, ok := carrierClasses[data.Carrier]
-	if !ok {
-		http.Error(w, "Invalid carrier code", http.StatusBadRequest)
-		return
-	}
-	data.Carrier = strconv.Itoa(carrierClass)
+    dataCopy := data
 
-	airportClass, ok := airportClasses[data.Airport]
-	if !ok {
-		http.Error(w, "Invalid airport code", http.StatusBadRequest)
-		return
-	}
-	data.Airport = strconv.Itoa(airportClass)
+    carrierClass, ok := carrierClasses[data.Carrier]
+    if !ok {
+        http.Error(w, "Invalid carrier code", http.StatusBadRequest)
+        return
+    }
+    data.Carrier = strconv.Itoa(carrierClass)
 
-	prediction1, err := getPrediction(data, endpoint1)
-	if err != nil {
-	    http.Error(w, err.Error(), http.StatusInternalServerError)
-	    return
-	}
-	
-	prediction2, err := getPrediction(data, endpoint2)
-	if err != nil {
-	    http.Error(w, err.Error(), http.StatusInternalServerError)
-	    return
-	}
+    airportClass, ok := airportClasses[data.Airport]
+    if !ok {
+        http.Error(w, "Invalid airport code", http.StatusBadRequest)
+        return
+    }
+    data.Airport = strconv.Itoa(airportClass)
 
-	response := fmt.Sprintf("Predicted Delay Time: %s\nOdds of a Delay: %s", prediction1, prediction2)
+    prediction1, err := getPrediction(dataCopy, endpoint1)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+    
+    prediction2, err := getPrediction(dataCopy, endpoint2)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
 
-	w.Write([]byte(response))
+    response := fmt.Sprintf("Predicted Delay Time: %s\nOdds of a Delay: %s", prediction1, prediction2)
+
+    w.Write([]byte(response))
 }
 
 func inputDataToCSV(data InputData) string {
