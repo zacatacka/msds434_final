@@ -75,8 +75,6 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 	}
 	data.Airport = strconv.Itoa(airportClass)
 
-	csvData := inputDataToCSV(data)
-
 	prediction1, err := getPrediction(data, endpoint1)
 	if err != nil {
 	    http.Error(w, err.Error(), http.StatusInternalServerError)
