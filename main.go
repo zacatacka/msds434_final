@@ -144,13 +144,3 @@ func getPrediction(data InputData, endpointName string) (string, error) {
 
     return prediction, nil
 }
-
-    output, err := sagemakerClient.InvokeEndpoint(input)
-    if err != nil {
-        return "", err
-    }
-
-    prediction := string(output.Body)
-
-    return prediction, nil
-}
