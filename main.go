@@ -112,45 +112,27 @@ func getPrediction(data InputData, endpointName string) (string, error) {
     if !ok {
         return "", fmt.Errorf("carrier not found in carrier_classes.json")
     }
-
     airportCode, ok := airportClasses[data.Airport]
     if !ok {
         return "", fmt.Errorf("airport not found in airport_classes.json")
     }
-
     csvData := fmt.Sprintf("%d,%d,%d", data.Month, carrierCode, airportCode)
-
     sess := session.Must(session.NewSessionWithOptions(session.Options{
         SharedConfigState: session.SharedConfigEnable,
         Config: aws.Config{
             Region: aws.String("us-east-2"),
         },
     }))
-
     sagemakerClient := sagemakerruntime.New(sess)
-
     input := &sagemakerruntime.InvokeEndpointInput{
         Body:         []byte(csvData),
         ContentType:  aws.String("text/csv"),
         EndpointName: aws.String(endpointName),
     }
-
     output, err := sagemakerClient.InvokeEndpoint(input)
     if err != nil {
         return "", err
     }
-
-    var resp struct {
-        Predictions []struct {
-            Score float64 `json:"score"`
-        } `json:"predictions"`
-    }
-    if err := json.Unmarshal(output.Body, &resp); err != nil {
-        return "", err
-    }
-
-    // Format the prediction
-    prediction := fmt.Sprintf("Predicted Delay Time: %.1f minutes\nOdds of a Delay: %.1f%%", resp.Predictions[0].Score, resp.Predictions[1].Score * 100)
-
+    prediction := string(output.Body)
     return prediction, nil
 }
