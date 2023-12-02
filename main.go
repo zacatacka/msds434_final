@@ -16,7 +16,7 @@ import (
 )
 
 var endpoint1 = "linear-learner-2023-12-02-16-34-32-276"
-var endpoint2 = "linear-learner-2023-12-02-16-40-41-257"
+var endpoint2 = "linear-learner-2023-12-02-17-57-03-454"
 
 type InputData struct {
 	Month   int    `json:"month"`
