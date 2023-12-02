@@ -8,6 +8,5 @@
     {
       "ContainerPort": 8080
     }
-  ],
-  "Logging": "/var/log/nginx"
+  ]
 }
