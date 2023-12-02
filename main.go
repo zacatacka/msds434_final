@@ -15,8 +15,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/sagemakerruntime"
 )
 
-var endpoint1 = "linear-learner-2023-12-01-00-51-42-595"
-var endpoint2 = "linear-learner-2023-12-01-00-45-56-124"
+var endpoint1 = "linear-learner-2023-12-02-16-34-32-276"
+var endpoint2 = "linear-learner-2023-12-02-16-37-04-095"
 
 type InputData struct {
 	Month   int    `json:"month"`
