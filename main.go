@@ -77,16 +77,16 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 
 	csvData := inputDataToCSV(data)
 
-	prediction1, err := getPrediction(csvData, endpoint1)
+	prediction1, err := getPrediction(data, endpoint1)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	    http.Error(w, err.Error(), http.StatusInternalServerError)
+	    return
 	}
-
-	prediction2, err := getPrediction(csvData, endpoint2)
+	
+	prediction2, err := getPrediction(data, endpoint2)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	    http.Error(w, err.Error(), http.StatusInternalServerError)
+	    return
 	}
 
 	response := fmt.Sprintf("Predicted Delay Time: %s\nOdds of a Delay: %s", prediction1, prediction2)
@@ -107,29 +107,50 @@ func inputDataToCSV(data InputData) string {
 	return b.String()
 }
 
-func getPrediction(csvData string, endpointName string) (string, error) {
-	log.Println("CSV Data:", csvData)
-	sess := session.Must(session.NewSessionWithOptions(session.Options{
-		SharedConfigState: session.SharedConfigEnable,
-		Config: aws.Config{
-            		Region: aws.String("us-east-2"),
-        	},
-	}))
+func getPrediction(data InputData, endpointName string) (string, error) {
+    carrierCode, ok := carrierClasses[data.Carrier]
+    if !ok {
+        return "", fmt.Errorf("carrier not found in carrier_classes.json")
+    }
 
-	sagemakerClient := sagemakerruntime.New(sess)
+    airportCode, ok := airportClasses[data.Airport]
+    if !ok {
+        return "", fmt.Errorf("airport not found in airport_classes.json")
+    }
 
-	input := &sagemakerruntime.InvokeEndpointInput{
-		Body:         []byte(csvData),
-		ContentType:  aws.String("text/csv"),
-		EndpointName: aws.String(endpointName),
-	}
+    csvData := fmt.Sprintf("%d,%d,%d", data.Month, carrierCode, airportCode)
 
-	output, err := sagemakerClient.InvokeEndpoint(input)
-	if err != nil {
-		return "", err
-	}
+    sess := session.Must(session.NewSessionWithOptions(session.Options{
+        SharedConfigState: session.SharedConfigEnable,
+        Config: aws.Config{
+            Region: aws.String("us-east-2"),
+        },
+    }))
 
-	prediction := string(output.Body)
+    sagemakerClient := sagemakerruntime.New(sess)
 
-	return prediction, nil
+    input := &sagemakerruntime.InvokeEndpointInput{
+        Body:         []byte(csvData),
+        ContentType:  aws.String("text/csv"),
+        EndpointName: aws.String(endpointName),
+    }
+
+    output, err := sagemakerClient.InvokeEndpoint(input)
+    if err != nil {
+        return "", err
+    }
+
+    prediction := string(output.Body)
+
+    return prediction, nil
+}
+
+    output, err := sagemakerClient.InvokeEndpoint(input)
+    if err != nil {
+        return "", err
+    }
+
+    prediction := string(output.Body)
+
+    return prediction, nil
 }
