@@ -1,6 +1,6 @@
 # msds434_final
 
-## [Video](https://northwestern.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=648d003b-a024-4b85-b5d0-b0cd01851733&start=0)
+[Video Walkthrough](https://northwestern.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=648d003b-a024-4b85-b5d0-b0cd01851733&start=0)
 
 ## 1. Local Machine
     -Pull data from: https://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.asp?20=E
